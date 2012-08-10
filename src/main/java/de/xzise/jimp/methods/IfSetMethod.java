@@ -18,6 +18,7 @@
 
 package de.xzise.jimp.methods;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.preset.IfMethod;
 import de.xzise.jimp.variables.Variables;
@@ -29,7 +30,7 @@ public class IfSetMethod extends IfMethod<Variables> {
     }
 
     @Override
-    protected Boolean match(Parameter[] preValues, Variables globalParameters) {
-        return preValues[0].parse() != null;
+    protected Boolean match(final Parameter[] preValues, final RuntimeOptions<?> runtime) {
+        return preValues[0].getValue(runtime) != null;
     }
 }

@@ -18,8 +18,8 @@
 
 package de.xzise.jimp.parameter.types;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
-import de.xzise.jimp.variables.Variables;
 
 public class StringParameterType extends NativeParameterType {
 
@@ -41,9 +41,9 @@ public class StringParameterType extends NativeParameterType {
     public static class StringParameterTypeFactory implements ParameterTypeFactory {
 
         @Override
-        public ParameterType create(Parameter[] parameters, Variables variables) {
+        public ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
             if (parameters.length == 1) {
-                String value = parameters[0].parse().asString();
+                String value = parameters[0].getValue(runtime).asString();
                 if (value != null) {
                     return new StringParameterType(value);
                 }

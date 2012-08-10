@@ -18,13 +18,14 @@
 
 package de.xzise.jimp.preset;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.variables.Variables;
 
 /**
  * Simple class for all original methods (without any arguments). Redirect all
- * calls to {@link OriginalMethod#call(String, int, Variables)}.
+ * calls to {@link OriginalMethod#call(String, RuntimeOptions)}.
  */
 public abstract class OriginalMethod<V extends Variables> extends DefaultNamedMethod<V> {
 
@@ -33,13 +34,13 @@ public abstract class OriginalMethod<V extends Variables> extends DefaultNamedMe
     }
 
     @Override
-    public final ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
+    public final ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         if (parameters.length == 0) {
-            return this.call(globalParameters);
+            return this.call(runtime);
         } else {
             return null;
         }
     }
 
-    protected abstract ParameterType call(V globalParameters);
+    protected abstract ParameterType call(final RuntimeOptions<? extends V> runtime);
 }

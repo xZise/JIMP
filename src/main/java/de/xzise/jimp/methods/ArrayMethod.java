@@ -18,6 +18,7 @@
 
 package de.xzise.jimp.methods;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ArrayParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
@@ -34,15 +35,15 @@ public class ArrayMethod extends DefaultNamedMethod<Variables> implements Parame
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
-        return this.create(parameters, globalParameters);
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
+        return this.create(parameters, runtime);
     }
 
     @Override
-    public ParameterType create(Parameter[] parameters, Variables variables) {
+    public ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         final ParameterType[] types = new ParameterType[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
-            types[i] = parameters[i].parse();
+            types[i] = parameters[i].getValue(runtime);
         }
         return new ArrayParameterType(types);
     }

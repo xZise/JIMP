@@ -18,9 +18,9 @@
 
 package de.xzise.jimp.parameter.types;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.preset.DefaultMethod;
-import de.xzise.jimp.variables.Variables;
 
 public class LongParameterType extends NativeParameterType implements LongParameter, NumberParameter, DoubleParameter {
 
@@ -55,9 +55,9 @@ public class LongParameterType extends NativeParameterType implements LongParame
     public static class LongParameterTypeFactory implements ParameterTypeFactory {
 
         @Override
-        public ParameterType create(Parameter[] parameters, Variables variables) {
+        public ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
             if (parameters.length == 1) {
-                Long l = DefaultMethod.parseAsLong(parameters[0].parse().asString());
+                Long l = DefaultMethod.parseAsLong(parameters[0].getValue(runtime).asString());
                 if (l != null) {
                     return new LongParameterType(l);
                 }

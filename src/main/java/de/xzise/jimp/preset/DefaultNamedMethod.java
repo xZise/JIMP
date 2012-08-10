@@ -19,7 +19,6 @@
 package de.xzise.jimp.preset;
 
 import de.xzise.jimp.MethodParser;
-import de.xzise.jimp.MethodRegistrator;
 import de.xzise.jimp.variables.Variables;
 
 /**
@@ -34,8 +33,8 @@ public abstract class DefaultNamedMethod<V extends Variables> extends DefaultMet
         this.defaultName = defaultName;
     }
 
-    public final DefaultNamedMethod<V> register(MethodRegistrator<? extends V> registrator) {
-        super.register(this.defaultName, registrator);
+    public final DefaultNamedMethod<V> register(MethodParser<? extends V> parser) {
+        super.register(this.defaultName, parser);
         return this;
     }
 

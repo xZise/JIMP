@@ -24,6 +24,7 @@ import java.util.Map;
 import de.xzise.MinecraftUtil;
 import de.xzise.bukkit.util.callback.Callback;
 import de.xzise.collections.ArrayReferenceList;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.parameter.types.StringParameterType;
@@ -61,20 +62,20 @@ public abstract class CaseMethod<V extends Variables, C extends V> extends Defau
     }
 
     @Override
-    public ParameterType innerCall(Parameter[] parameters, C globalParameters) {
+    public ParameterType innerCall(final Parameter[] parameters, final RuntimeOptions<C> runtime) {
         CaseEnum caseEnum = null;
         if (parameters.length == 0) {
             caseEnum = CaseEnum.NONE;
         } else if (parameters.length == 1 || parameters.length == 3) {
-            caseEnum = CaseEnum.CASE_ENUMS.get(parameters[0].parse().asString().toLowerCase());
+            caseEnum = CaseEnum.CASE_ENUMS.get(parameters[0].getValue(runtime).asString().toLowerCase());
         }
         if ((caseEnum == CaseEnum.CUSTOM && parameters.length == 3) || (caseEnum != CaseEnum.CUSTOM && caseEnum != null && parameters.length == 1)) {
             Parameter[] preValues = Arrays.copyOf(parameters, preValueCount);
-            final String result = this.call(preValues, globalParameters);
+            final String result = this.preValueCall(preValues, runtime);
             switch (caseEnum) {
             case CUSTOM:
-                final char[] upperTrigger = parameters[1].parse().asString().toCharArray();
-                final char[] upperReceiver = parameters[2].parse().asString().toCharArray();
+                final char[] upperTrigger = parameters[1].getValue(runtime).asString().toCharArray();
+                final char[] upperReceiver = parameters[2].getValue(runtime).asString().toCharArray();
                 final char[] processedCustom = new char[result.length()];
                 int indexCustom = 0;
                 boolean makeUpperCustom = true;
@@ -132,5 +133,5 @@ public abstract class CaseMethod<V extends Variables, C extends V> extends Defau
         return new String(chars);
     }
 
-    protected abstract String call(Parameter[] preValues, C globalParameters);
+    protected abstract String preValueCall(Parameter[] preValues, RuntimeOptions<C> runtime);
 }

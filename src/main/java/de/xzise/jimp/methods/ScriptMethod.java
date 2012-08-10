@@ -29,6 +29,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import de.xzise.jimp.Method;
+import de.xzise.jimp.RuntimeOptions;
 
 import de.xzise.MinecraftUtil;
 import de.xzise.jimp.parameter.Parameter;
@@ -72,10 +73,10 @@ public class ScriptMethod implements Method<Variables> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends Variables> runtime) {
         Object result = null;
         try {
-            result = this.invocable.invokeFunction(this.methodName, parameters, globalParameters);
+            result = this.invocable.invokeFunction(this.methodName, parameters, runtime);
         } catch (ScriptException e) {
             this.logger.log(Level.WARNING, "Unable to call '" + this.methodName + "(Parameter[], Variables)'!", e);
         } catch (NoSuchMethodException e) {

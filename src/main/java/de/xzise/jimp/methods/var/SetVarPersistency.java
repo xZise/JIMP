@@ -16,32 +16,28 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp.parameter;
+package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.MethodParser;
-
+import de.xzise.jimp.RuntimeOptions;
+import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
+import de.xzise.jimp.preset.DefaultNamedMethod;
 import de.xzise.jimp.variables.Variables;
 
-public class OnceParsedParameter<V extends Variables> extends ParsedParameter<V> {
+public class SetVarPersistency extends DefaultNamedMethod<Variables> {
 
-    private ParameterType parsedParameter = null;
-    private boolean parsed = false;
+    private final boolean persistent;
 
-    public OnceParsedParameter(final MethodParser<? super V> parser, final String parameterValue, final V variable, final int depth) {
-        super(parser, parameterValue, variable, depth);
-    }
-
-    public static <V extends Variables> OnceParsedParameter<V> create(final MethodParser<? super V> parser, final String parameterValue, final V variable, final int depth) {
-        return new OnceParsedParameter<V>(parser, parameterValue, variable, depth);
+    public SetVarPersistency(final boolean setPersistent) {
+        super(setPersistent ? "setpvar" : "setvar", -1);
+        this.persistent = setPersistent;
     }
 
     @Override
-    public ParameterType parse() {
-        if (!this.parsed) {
-            this.parsedParameter = super.parse();
-            this.parsed = true;
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends Variables> runtime) {
+        for (Parameter parameter : parameters) {
+            runtime.parser.setPersistency(parameter.getValue(runtime).asString(), this.persistent);
         }
-        return this.parsedParameter;
+        return null;
     }
 }

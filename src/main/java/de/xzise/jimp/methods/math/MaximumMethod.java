@@ -16,22 +16,18 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp.preset;
+package de.xzise.jimp.methods.math;
 
-import de.xzise.jimp.RuntimeOptions;
-import de.xzise.jimp.parameter.types.ParameterType;
-import de.xzise.jimp.variables.Variables;
+import de.xzise.jimp.preset.MinMaxMethod;
 
-public abstract class EmptyMethod extends OriginalMethod<Variables> {
+public class MaximumMethod extends MinMaxMethod {
 
-    public EmptyMethod(final String defaultName) {
-        super(defaultName);
+    public MaximumMethod(final boolean first) {
+        super(first, "max");
     }
 
     @Override
-    protected ParameterType call(final RuntimeOptions<? extends Variables> runtime) {
-        return this.call();
+    protected boolean compare(long nHighest, long tested) {
+        return nHighest > tested;
     }
-
-    protected abstract ParameterType call();
 }

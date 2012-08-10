@@ -16,18 +16,22 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp.methods;
+package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.preset.MinMaxMethod;
+import de.xzise.jimp.RuntimeOptions;
+import de.xzise.jimp.parameter.Parameter;
+import de.xzise.jimp.parameter.types.BooleanParameterType;
+import de.xzise.jimp.preset.DefaultNamedMethod;
+import de.xzise.jimp.variables.Variables;
 
-public class MaximumMethod extends MinMaxMethod {
+public class IsVarPersistent extends DefaultNamedMethod<Variables> {
 
-    public MaximumMethod(final boolean first) {
-        super(first, "max");
+    public IsVarPersistent() {
+        super("isvarpersistent", 1);
     }
 
     @Override
-    protected boolean compare(long nHighest, long tested) {
-        return nHighest > tested;
+    public BooleanParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends Variables> runtime) {
+        return new BooleanParameterType(runtime.parser.isPersistent(parameters[0].getValue(runtime).asString()));
     }
 }

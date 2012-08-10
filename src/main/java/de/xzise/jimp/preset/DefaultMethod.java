@@ -21,7 +21,6 @@ package de.xzise.jimp.preset;
 import de.xzise.MinecraftUtil;
 import de.xzise.jimp.Method;
 import de.xzise.jimp.MethodParser;
-import de.xzise.jimp.MethodRegistrator;
 import de.xzise.jimp.variables.Variables;
 
 /**
@@ -39,8 +38,8 @@ public abstract class DefaultMethod<V extends Variables> implements Method<V> {
         return this.paramCounts.clone();
     }
 
-    public final DefaultMethod<V> register(String name, MethodRegistrator<? extends V> registrator) {
-        registrator.registerMethod(name, this, this.paramCounts);
+    public final DefaultMethod<V> register(String name, MethodParser<? extends V> parser) {
+        parser.registerMethod(name, this, this.paramCounts);
         return this;
     }
 

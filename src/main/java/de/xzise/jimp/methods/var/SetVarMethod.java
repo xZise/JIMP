@@ -18,7 +18,7 @@
 
 package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ArrayParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
@@ -26,16 +26,16 @@ import de.xzise.jimp.variables.Variables;
 
 public class SetVarMethod<V extends Variables> extends ReturnVarMethod<V> {
 
-    public SetVarMethod(final MethodParser<? super V> parser, final boolean persistent) {
-        super(persistent ? "setpvar" : "setvar", parser, persistent);
+    public SetVarMethod(final boolean persistent) {
+        super(persistent ? "setpvar" : "setvar", persistent);
     }
 
     @Override
-    protected ParameterType getValue(Parameter[] parameters, int depth, V globalParameters) {
+    protected ParameterType getValue(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         if (parameters.length == 1) {
             return new ArrayParameterType(new ParameterType[0]);
         } else {
-            return super.getValue(parameters, depth, globalParameters);
+            return super.getValue(parameters, runtime);
         }
     }
 }

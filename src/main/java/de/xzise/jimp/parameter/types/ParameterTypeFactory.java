@@ -18,10 +18,10 @@
 
 package de.xzise.jimp.parameter.types;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
-import de.xzise.jimp.variables.Variables;
 
 public interface ParameterTypeFactory {
 
-    ParameterType create(final Parameter[] parameters, final Variables variables);
+    ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime);
 }

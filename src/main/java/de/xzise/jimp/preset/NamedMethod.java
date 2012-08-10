@@ -20,12 +20,11 @@ package de.xzise.jimp.preset;
 
 import de.xzise.jimp.Method;
 import de.xzise.jimp.MethodParser;
-import de.xzise.jimp.MethodRegistrator;
 import de.xzise.jimp.variables.Variables;
 
 public interface NamedMethod<V extends Variables> extends Method<V> {
 
-    NamedMethod<V> register(MethodRegistrator<? extends V> registrator);
+    NamedMethod<V> register(MethodParser<? extends V> registrator);
 
     NamedMethod<V> unregister(MethodParser<? extends V> parser);
 }

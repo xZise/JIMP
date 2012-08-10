@@ -19,6 +19,7 @@
 package de.xzise.jimp.methods;
 
 import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.preset.DefaultNamedMethod;
@@ -40,13 +41,13 @@ public class AliasMethod<V extends Variables> extends DefaultNamedMethod<V> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         if (this.getParamCounts()[0] == parameters.length) {
             String result = this.result;
             for (int i = 0; i < parameters.length; i++) {
-                result = result.replaceAll("\\$" + i + ";", parameters[i].parse().asParsableString(this.parser.getPrefix()));
+                result = result.replaceAll("\\$" + i + ";", parameters[i].getValue(runtime).asParsableString(this.parser.getPrefix()));
             }
-            return this.parser.parseLine(result, globalParameters, depth + 1);
+            return MethodParser.compile(result).executeOnly(runtime);
         } else {
             return null;
         }

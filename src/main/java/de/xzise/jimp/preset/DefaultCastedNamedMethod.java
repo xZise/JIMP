@@ -19,7 +19,6 @@
 package de.xzise.jimp.preset;
 
 import de.xzise.jimp.MethodParser;
-import de.xzise.jimp.MethodRegistrator;
 import de.xzise.jimp.variables.Variables;
 
 public abstract class DefaultCastedNamedMethod<V extends Variables, C extends V> extends DefaultCastedMethod<V, C> implements NamedMethod<V> {
@@ -31,7 +30,7 @@ public abstract class DefaultCastedNamedMethod<V extends Variables, C extends V>
         this.defaultName = defaultName;
     }
 
-    public final DefaultCastedNamedMethod<V, C> register(MethodRegistrator<? extends V> registrator) {
+    public final DefaultCastedNamedMethod<V, C> register(MethodParser<? extends V> registrator) {
         super.register(this.defaultName, registrator);
         return this;
     }

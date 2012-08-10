@@ -18,9 +18,10 @@
 
 package de.xzise.jimp.methods.math;
 
+import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.DoubleParameterType;
-import de.xzise.jimp.parameter.types.LongParameterType;
 import de.xzise.jimp.parameter.types.NativeParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.preset.DefaultNamedMethod;
@@ -28,21 +29,24 @@ import de.xzise.jimp.variables.Variables;
 
 public class SubtractMethod extends DefaultNamedMethod<Variables> {
 
-    public SubtractMethod() {
+    private final MethodParser<?> parser;
+
+    public SubtractMethod(final MethodParser<? extends Variables> parser) {
         super("subtract", -1);
+        this.parser = parser;
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         double difference = 0D;
         Double buffer;
         for (Parameter parameter : parameters) {
-            buffer = NativeParameterType.asDouble(parameter.parse());
+            buffer = NativeParameterType.asDouble(parameter.getValue(runtime));
             if (buffer != null) {
                 difference -= buffer;
             }
         }
-        return new DoubleParameterType(difference);
+        return new DoubleParameterType(difference, this.parser.getDefaultFormat());
     }
 
 }

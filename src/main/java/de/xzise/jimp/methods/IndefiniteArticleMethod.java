@@ -18,6 +18,7 @@
 
 package de.xzise.jimp.methods;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.parameter.types.StringParameterType;
@@ -31,9 +32,9 @@ public class IndefiniteArticleMethod extends DefaultNamedMethod<Variables> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         if (parameters.length == 1) {
-            char letter = parameters[0].parse().asString().trim().charAt(0);
+            char letter = parameters[0].getValue(runtime).asString().trim().charAt(0);
             final boolean vowel = (letter == 'a' || letter == 'e' || letter == 'i' || letter == 'o' || letter == 'u');
             return new StringParameterType((vowel ? "an " : "a ") + parameters[0]);
         } else {

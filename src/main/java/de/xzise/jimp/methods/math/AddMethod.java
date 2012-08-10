@@ -18,9 +18,10 @@
 
 package de.xzise.jimp.methods.math;
 
+import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.DoubleParameterType;
-import de.xzise.jimp.parameter.types.LongParameterType;
 import de.xzise.jimp.parameter.types.NativeParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.preset.DefaultNamedMethod;
@@ -28,20 +29,23 @@ import de.xzise.jimp.variables.Variables;
 
 public class AddMethod extends DefaultNamedMethod<Variables> {
 
-    public AddMethod() {
+    private final MethodParser<?> parser;
+
+    public AddMethod(final MethodParser<? extends Variables> parser) {
         super("add", -1);
+        this.parser = parser;
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         double sum = 0D;
         Double buffer;
         for (Parameter parameter : parameters) {
-            buffer = NativeParameterType.asDouble(parameter.parse());
+            buffer = NativeParameterType.asDouble(parameter.getValue(runtime));
             if (buffer != null) {
                 sum += buffer;
             }
         }
-        return new DoubleParameterType(sum);
+        return new DoubleParameterType(sum, this.parser.getDefaultFormat());
     }
 }

@@ -18,7 +18,7 @@
 
 package de.xzise.jimp.preset;
 
-import de.xzise.MinecraftUtil;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.variables.Variables;
@@ -32,13 +32,13 @@ public abstract class DefaultCastedMethod<V extends Variables, C extends V> exte
         this.variableClass = variableClass;
     }
 
-    public abstract ParameterType innerCall(Parameter[] parameters, C globalParameters);
+    public abstract ParameterType innerCall(Parameter[] parameters, RuntimeOptions<C> runtime);
 
+    @SuppressWarnings("unchecked")
     @Override
-    public final ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
-        C castedParameters = MinecraftUtil.cast(variableClass, globalParameters);
-        if (castedParameters != null) {
-            return this.innerCall(parameters, castedParameters);
+    public final ParameterType call(Parameter[] parameters, RuntimeOptions<? extends V> runtime) {
+        if (this.variableClass.isInstance(runtime.variables)) {
+            return this.innerCall(parameters, (RuntimeOptions<C>) runtime);
         } else {
             return null;
         }

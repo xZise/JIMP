@@ -20,8 +20,8 @@ package de.xzise.jimp.parameter.types;
 
 import java.text.DecimalFormat;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
-import de.xzise.jimp.variables.Variables;
 
 import de.xzise.MinecraftUtil;
 
@@ -54,24 +54,28 @@ public class DoubleParameterType extends NativeParameterType implements DoublePa
         return this.format.format(this.value);
     }
 
+    public DecimalFormat getFormat() {
+        return this.format;
+    }
+
     public static final DoubleParameterTypeFactory DOUBLE_PARAMETER_TYPE_FACTORY = new DoubleParameterTypeFactory();
 
     public static class DoubleParameterTypeFactory implements ParameterTypeFactory {
 
         @Override
-        public ParameterType create(Parameter[] parameters, Variables variables) {
+        public ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
             Long minDecimals = 0L;
             Long maxDecimals = 0L;
             Double d = null;
             switch (parameters.length) {
             case 3:
-                minDecimals = NativeParameterType.asLong(parameters[2].parse());
+                minDecimals = NativeParameterType.asLong(parameters[2].getValue(runtime));
             case 2:
-                maxDecimals = NativeParameterType.asLong(parameters[1].parse());
+                maxDecimals = NativeParameterType.asLong(parameters[1].getValue(runtime));
             case 1:
-                d = NativeParameterType.asDouble(parameters[0].parse());
+                d = NativeParameterType.asDouble(parameters[0].getValue(runtime));
                 if (d == null) {
-                    final String value = parameters[0].parse().asString();
+                    final String value = parameters[0].getValue(runtime).asString();
                     if (value != null) {
                         d = MinecraftUtil.tryAndGetDouble(value);
                     }

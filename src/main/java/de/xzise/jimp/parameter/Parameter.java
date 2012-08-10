@@ -1,28 +1,48 @@
-/*
- * This file is part of Java Inline Method Parser.
- * 
- * Java Inline Method Parser is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
- * 
- * Java Inline Method Parser is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with Java Inline Method Parser.
- * If not, see <http://www.gnu.org/licenses/>.
- */
-
 package de.xzise.jimp.parameter;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.types.ParameterType;
+import de.xzise.jimp.parameter.types.StringParameterType;
+import de.xzise.jimp.variables.Variables;
 
-public interface Parameter {
+public class Parameter {
 
-    ParameterType parse();
+    public static final Parameter EMPTY_PARAMETER = new Parameter("", "", false);
 
-    String getText();
+    private final String entry;
+    private final String full;
+    public final boolean quoted;
+    public final boolean finalValue;
+
+    public Parameter(final String entry, final String full, final boolean quoted) {
+        this(entry, full, quoted, true);
+    }
+
+    protected Parameter(final String entry, final String full, final boolean quoted, final boolean finalValue) {
+        this.entry = entry;
+        this.full = full;
+        this.quoted = quoted;
+        this.finalValue = finalValue;
+    }
+
+    protected <V extends Variables> ParameterType getInnerValue(final RuntimeOptions<V> runtime) {
+        return new StringParameterType(this.entry);
+    }
+
+    public final <V extends Variables> ParameterType getValue(final RuntimeOptions<V> runtime) {
+        final ParameterType result = this.getInnerValue(runtime);
+        if (result == null) {
+            return new StringParameterType(this.full);
+        } else {
+            return result;
+        }
+    }
+
+    public String getText() {
+        return this.entry;
+    }
+
+    public String getFullText() {
+        return this.full;
+    }
 }

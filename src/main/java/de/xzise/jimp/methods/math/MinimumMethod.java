@@ -16,11 +16,19 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp;
+package de.xzise.jimp.methods.math;
 
-import de.xzise.jimp.variables.Variables;
+import de.xzise.jimp.preset.MinMaxMethod;
 
-public interface MethodRegistrator<V extends Variables> {
+public class MinimumMethod extends MinMaxMethod {
 
-    int registerMethod(final String name, Method<? super V> method, int... paramCount);
+    public MinimumMethod(final boolean first) {
+        super(first, "min");
+    }
+
+    @Override
+    protected boolean compare(long nLowest, long tested) {
+        return nLowest < tested;
+    }
+
 }

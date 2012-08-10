@@ -19,6 +19,7 @@
 package de.xzise.jimp.methods;
 
 import de.xzise.jimp.Method;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.variables.Variables;
@@ -32,7 +33,7 @@ public class RedirectMethod<V extends Variables> implements Method<V> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
-        return this.redirected.call(parameters, depth + 1, globalParameters);
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
+        return runtime.call(this.redirected, parameters);
     }
 }

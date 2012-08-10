@@ -29,9 +29,7 @@ public interface Method<V extends Variables> {
      * 
      * @param parameters
      *            the parameters.
-     * @param depth
-     *            the depth of this call.
      * @return the parsed string or null if invalid.
      */
-    ParameterType call(Parameter[] parameters, final int depth, V globalParameters);
+    ParameterType call(Parameter[] parameters, RuntimeOptions<? extends V> runtime);
 }

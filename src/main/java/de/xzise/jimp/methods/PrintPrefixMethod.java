@@ -20,6 +20,7 @@ package de.xzise.jimp.methods;
 
 import de.xzise.MinecraftUtil;
 import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.parameter.types.StringParameterType;
@@ -36,7 +37,7 @@ public class PrintPrefixMethod extends DefaultMethod<Variables> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         if (parameters.length == 0) {
             return new StringParameterType(this.parser.getPrefix());
         } else {

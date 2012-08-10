@@ -20,6 +20,7 @@ package de.xzise.jimp.preset;
 
 import java.util.ArrayList;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.LongParameterType;
 import de.xzise.jimp.parameter.types.NativeParameterType;
@@ -38,14 +39,14 @@ public abstract class MinMaxMethod extends DefaultNamedMethod<Variables> {
     protected abstract boolean compare(final long nHighLowest, final long tested);
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends Variables> runtime) {
         if (parameters.length > 0) {
-            final Long count = this.first ? 1 : NativeParameterType.asLong(parameters[0].parse());
+            final Long count = this.first ? 1 : NativeParameterType.asLong(parameters[0].getValue(runtime));
             if (count != null) {
                 final int intCount = count.intValue();
                 ArrayList<Long> longs = new ArrayList<Long>(parameters.length);
                 for (int i = (this.first ? 0 : 1); i < parameters.length; i++) {
-                    Long longBuffer = NativeParameterType.asLong(parameters[i].parse());
+                    Long longBuffer = NativeParameterType.asLong(parameters[i].getValue(runtime));
                     if (longBuffer != null) {
                         longs.add(longBuffer);
                     }

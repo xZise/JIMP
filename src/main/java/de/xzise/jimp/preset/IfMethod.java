@@ -21,7 +21,7 @@ package de.xzise.jimp.preset;
 import java.util.Arrays;
 
 import de.xzise.jimp.Method;
-import de.xzise.jimp.parameter.FinalParameter;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.variables.Variables;
@@ -37,9 +37,9 @@ public abstract class IfMethod<V extends Variables> implements Method<V> {
     }
 
     @Override
-    public final ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
-        Parameter match = FinalParameter.EMPTY_PARAMETER;
-        Parameter noMatch = FinalParameter.EMPTY_PARAMETER;
+    public final ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
+        Parameter match = Parameter.EMPTY_PARAMETER;
+        Parameter noMatch = Parameter.EMPTY_PARAMETER;
         switch (parameters.length - this.preValueCount) {
         case 2:
             noMatch = parameters[this.preValueCount + 1];
@@ -49,9 +49,9 @@ public abstract class IfMethod<V extends Variables> implements Method<V> {
         default:
             return null;
         }
-        return this.match(Arrays.copyOf(parameters, this.preValueCount), globalParameters) != this.inverted ? match.parse() : noMatch.parse();
+        return this.match(Arrays.copyOf(parameters, this.preValueCount), runtime) != this.inverted ? match.getValue(runtime) : noMatch.getValue(runtime);
     }
 
-    protected abstract Boolean match(Parameter[] preValues, V globalParameters);
+    protected abstract Boolean match(final Parameter[] preValues, final RuntimeOptions<? extends V> runtime);
 
 }

@@ -19,6 +19,7 @@
 package de.xzise.jimp.preset;
 
 import de.xzise.MinecraftUtil;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.DoubleParameterType;
 import de.xzise.jimp.parameter.types.NativeParameterType;
@@ -32,19 +33,19 @@ public abstract class DoubleMethod<V extends Variables, C extends V> extends Def
     }
 
     @Override
-    public final ParameterType innerCall(Parameter[] parameters, C globalParameters) {
+    public final ParameterType innerCall(final Parameter[] parameters, final RuntimeOptions<C> runtime) {
         if (parameters.length > 2) {
             return null;
         } else {
-            Double value = getValue(globalParameters);
+            final Double value = getValue(runtime);
             if (value != null) {
                 Long minDecimals = 0L;
                 Long maxDecimals = 0L;
                 switch (parameters.length) {
                 case 2:
-                    minDecimals = NativeParameterType.asLong(parameters[1].parse());
+                    minDecimals = NativeParameterType.asLong(parameters[1].getValue(runtime));
                 case 1:
-                    maxDecimals = NativeParameterType.asLong(parameters[0].parse());
+                    maxDecimals = NativeParameterType.asLong(parameters[0].getValue(runtime));
                     break;
                 }
                 if (minDecimals != null && maxDecimals != null) {
@@ -58,5 +59,5 @@ public abstract class DoubleMethod<V extends Variables, C extends V> extends Def
         }
     }
 
-    public abstract Double getValue(C globalParameters);
+    public abstract Double getValue(final RuntimeOptions<C> runtime);
 }

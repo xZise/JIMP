@@ -19,6 +19,7 @@
 package de.xzise.jimp.methods;
 
 import de.xzise.EqualCheck;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.NativeParameterType;
 import de.xzise.jimp.preset.IfMethod;
@@ -34,9 +35,9 @@ public class IfArithmeticMethod extends IfMethod<Variables> {
     }
 
     @Override
-    protected Boolean match(Parameter[] preValues, Variables globalParameters) {
-        Double a = NativeParameterType.asDouble(preValues[0].parse());
-        Double b = NativeParameterType.asDouble(preValues[1].parse());
+    protected Boolean match(final Parameter[] preValues, final RuntimeOptions<?> runtime) {
+        Double a = NativeParameterType.asDouble(preValues[0].getValue(runtime));
+        Double b = NativeParameterType.asDouble(preValues[1].getValue(runtime));
         if (a != null && b != null) {
             return this.checker.equals(a, b);
         } else {

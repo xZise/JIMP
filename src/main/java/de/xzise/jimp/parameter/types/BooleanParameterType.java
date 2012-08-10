@@ -18,9 +18,9 @@
 
 package de.xzise.jimp.parameter.types;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.preset.DefaultMethod;
-import de.xzise.jimp.variables.Variables;
 
 public class BooleanParameterType extends NativeParameterType implements BooleanParameter {
 
@@ -45,9 +45,9 @@ public class BooleanParameterType extends NativeParameterType implements Boolean
     public static class BooleanParameterTypeFactory implements ParameterTypeFactory {
 
         @Override
-        public ParameterType create(Parameter[] parameters, Variables variables) {
+        public ParameterType create(Parameter[] parameters, RuntimeOptions<?> runtime) {
             if (parameters.length == 1) {
-                Boolean b = DefaultMethod.parseAsBoolean(parameters[0].parse().asString());
+                Boolean b = DefaultMethod.parseAsBoolean(parameters[0].getValue(runtime).asString());
                 if (b != null) {
                     return new BooleanParameterType(b);
                 }

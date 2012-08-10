@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import de.xzise.collections.ArrayIterator;
 import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.parameter.types.StringParameterType;
@@ -47,19 +48,19 @@ public class PrintMethod<V extends Variables> extends DefaultNamedMethod<V> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         StringBuilder builder = new StringBuilder();
         final ParameterType[] typeArray = new ParameterType[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             if (this.isRecursive) {
-                typeArray[i] = parameters[i].parse();
+                typeArray[i] = parameters[i].getValue(runtime);
             } else {
                 typeArray[i] = new StringParameterType(parameters[i].getText());
             }
         }
         printArray(typeArray, builder);
         if (this.isRecursive) {
-            return this.parser.parseLine(builder.toString(), globalParameters, depth + 1);
+            return MethodParser.compile(builder.toString()).executeOnly(runtime);
         } else {
             return new StringParameterType(builder.toString());
         }

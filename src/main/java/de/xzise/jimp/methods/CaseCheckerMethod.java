@@ -19,6 +19,7 @@
 package de.xzise.jimp.methods;
 
 import de.xzise.EqualCheck;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.preset.DefaultNamedMethod;
@@ -34,7 +35,7 @@ public class CaseCheckerMethod extends DefaultNamedMethod<Variables> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         //@formatter:off
 	    /*
 	     * case(
@@ -57,12 +58,12 @@ public class CaseCheckerMethod extends DefaultNamedMethod<Variables> {
 		//@formatter:on
         if (parameters.length >= 2) {
             for (int i = 0; i < (parameters.length - 2) / 2; i++) {
-                if (this.checker.equals(parameters[0].parse().asString(), parameters[i * 2 + 1].parse().asString())) {
-                    return parameters[i * 2 + 2].parse();
+                if (this.checker.equals(parameters[0].getValue(runtime).asString(), parameters[i * 2 + 1].getValue(runtime).asString())) {
+                    return parameters[i * 2 + 2].getValue(runtime);
                 }
             }
             if (parameters.length % 2 == 0) {
-                return parameters[parameters.length - 1].parse();
+                return parameters[parameters.length - 1].getValue(runtime);
             } else {
                 return null;
             }

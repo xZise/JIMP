@@ -21,6 +21,7 @@ package de.xzise.jimp.methods;
 import java.util.Comparator;
 
 import de.xzise.EqualCheck;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.preset.IfMethod;
 import de.xzise.jimp.variables.Variables;
@@ -39,7 +40,7 @@ public class IfCheckerMethod extends IfMethod<Variables> {
     }
 
     @Override
-    protected Boolean match(Parameter[] preValues, Variables globalParameters) {
-        return this.checker.equals(preValues[0].parse().asString(), preValues[1].parse().asString());
+    protected Boolean match(final Parameter[] preValues, final RuntimeOptions<?> runtime) {
+        return this.checker.equals(preValues[0].getValue(runtime).asString(), preValues[1].getValue(runtime).asString());
     }
 }

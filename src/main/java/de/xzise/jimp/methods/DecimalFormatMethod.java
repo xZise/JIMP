@@ -21,6 +21,7 @@ package de.xzise.jimp.methods;
 import java.text.DecimalFormat;
 
 import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.CreateableParameterTypes;
 import de.xzise.jimp.parameter.types.NativeParameterType;
@@ -83,9 +84,9 @@ public class DecimalFormatMethod extends DefaultNamedMethod<Variables> {
         public static class DecimalFormatParameterTypeFactory implements ParameterTypeFactory {
 
             @Override
-            public ParameterType create(Parameter[] parameters, Variables variables) {
+            public ParameterType create(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
                 if (parameters.length == 1) {
-                    String value = parameters[0].parse().asString();
+                    String value = parameters[0].getValue(runtime).asString();
                     if (value != null) {
                         return new DecimalFormatParameterType(value);
                     }
@@ -97,11 +98,11 @@ public class DecimalFormatMethod extends DefaultNamedMethod<Variables> {
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
         if (parameters.length == 2) {
-            Number n = NativeParameterType.asNumber(parameters[1].parse());
+            Number n = NativeParameterType.asNumber(parameters[1].getValue(runtime));
             if (n != null) {
-                final ParameterType parameter = parameters[0].parse();
+                final ParameterType parameter = parameters[0].getValue(runtime);
                 if (parameter instanceof DecimalFormatParameterType) {
                     return new StringParameterType(((DecimalFormatParameterType) parameter).format(n));
                 } else {

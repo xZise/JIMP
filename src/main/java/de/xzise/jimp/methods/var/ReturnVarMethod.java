@@ -18,7 +18,7 @@
 
 package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ArrayParameterType;
 import de.xzise.jimp.parameter.types.NativeParameterType;
@@ -28,26 +28,24 @@ import de.xzise.jimp.variables.Variables;
 
 public class ReturnVarMethod<V extends Variables> extends DefaultNamedMethod<V> {
 
-    private final MethodParser<? super V> parser;
     private final boolean persistent;
 
-    public ReturnVarMethod(final MethodParser<? super V> parser, final boolean persistent) {
-        this(persistent ? "returnpvar" : "returnvar", parser, persistent);
+    public ReturnVarMethod(final boolean persistent) {
+        this(persistent ? "returnpvar" : "returnvar", persistent);
     }
 
-    protected ReturnVarMethod(final String name, final MethodParser<? super V> parser, final boolean persistent) {
+    protected ReturnVarMethod(final String name, final boolean persistent) {
         super(name, -1);
-        this.parser = parser;
         this.persistent = persistent;
     }
 
-    protected ParameterType getValue(Parameter[] parameters, int depth, V globalParameters) {
+    protected ParameterType getValue(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         if (parameters.length == 2) {
-            return parameters[0].parse();
+            return parameters[0].getValue(runtime);
         } else if (parameters.length > 2) {
             final ParameterType[] array = new ParameterType[parameters.length - 1];
             for (int i = 1; i < parameters.length; i++) {
-                array[i - 1] = parameters[i].parse();
+                array[i - 1] = parameters[i].getValue(runtime);
             }
             return new ArrayParameterType(array);
         } else {
@@ -56,15 +54,15 @@ public class ReturnVarMethod<V extends Variables> extends DefaultNamedMethod<V> 
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, V globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         final ParameterType value;
         if (parameters.length > 0) {
-            final String name = parameters[0].parse().asString();
-            value = getValue(parameters, depth, globalParameters);
+            final String name = parameters[0].getValue(runtime).asString();
+            value = this.getValue(parameters, runtime);
             if (value == null) {
-                return this.parser.getVariable(name);
+                return runtime.parser.getVariable(name);
             } else {
-                this.parser.setVariable(name, value, this.persistent);
+                runtime.parser.setVariable(name, value, this.persistent);
             }
         } else {
             value = NativeParameterType.NULL_PARAMETER_TYPE;

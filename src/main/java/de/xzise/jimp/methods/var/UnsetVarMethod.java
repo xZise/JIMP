@@ -18,7 +18,7 @@
 
 package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.MethodParser;
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.NativeParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
@@ -27,17 +27,14 @@ import de.xzise.jimp.variables.Variables;
 
 public class UnsetVarMethod<V extends Variables> extends DefaultNamedMethod<V> {
 
-    private final MethodParser<? super V> parser;
-
-    public UnsetVarMethod(final MethodParser<? super V> parser) {
+    public UnsetVarMethod() {
         super("unsetvar", -1);
-        this.parser = parser;
     }
 
     @Override
-    public ParameterType call(Parameter[] parameters, int depth, Variables globalParameters) {
+    public ParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends V> runtime) {
         for (Parameter parameter : parameters) {
-            this.parser.unsetVariable(parameter.parse().asString());
+            runtime.parser.unsetVariable(parameter.getValue(runtime).asString());
         }
         return NativeParameterType.EMPTY_PARAMETER_TYPE;
     }

@@ -18,6 +18,7 @@
 
 package de.xzise.jimp.preset;
 
+import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.variables.Variables;
@@ -29,14 +30,14 @@ public abstract class OriginalCastedMethod<V extends Variables, C extends V> ext
     }
 
     @Override
-    public final ParameterType innerCall(Parameter[] parameters, C globalParameters) {
+    public final ParameterType innerCall(final Parameter[] parameters, final RuntimeOptions<C> runtime) {
         if (parameters.length == 0) {
-            return this.call(globalParameters);
+            return this.call(runtime);
         } else {
             return null;
         }
     }
 
-    protected abstract ParameterType call(C globalParameters);
+    protected abstract ParameterType call(final RuntimeOptions<C> runtime);
 
 }

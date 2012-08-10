@@ -16,19 +16,23 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp.methods;
+package de.xzise.jimp.methods.var;
 
-import de.xzise.jimp.preset.MinMaxMethod;
+import de.xzise.jimp.RuntimeOptions;
+import de.xzise.jimp.parameter.Parameter;
+import de.xzise.jimp.parameter.types.BooleanParameterType;
+import de.xzise.jimp.preset.DefaultNamedMethod;
+import de.xzise.jimp.variables.Variables;
 
-public class MinimumMethod extends MinMaxMethod {
+public class IsVarSet extends DefaultNamedMethod<Variables> {
 
-    public MinimumMethod(final boolean first) {
-        super(first, "min");
+    public IsVarSet() {
+        super("isvarset", 1);
     }
 
     @Override
-    protected boolean compare(long nLowest, long tested) {
-        return nLowest < tested;
+    public BooleanParameterType call(final Parameter[] parameters, final RuntimeOptions<? extends Variables> runtime) {
+        return new BooleanParameterType(runtime.parser.isVariableSet(parameters[0].getValue(runtime).asString()));
     }
 
 }

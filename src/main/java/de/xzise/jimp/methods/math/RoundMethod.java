@@ -16,24 +16,44 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.xzise.jimp.methods;
+package de.xzise.jimp.methods.math;
 
-import de.xzise.MinecraftUtil;
+import java.text.DecimalFormat;
+
+import de.xzise.jimp.MethodParser;
 import de.xzise.jimp.RuntimeOptions;
 import de.xzise.jimp.parameter.Parameter;
+import de.xzise.jimp.parameter.types.DoubleParameter;
+import de.xzise.jimp.parameter.types.DoubleParameterType;
 import de.xzise.jimp.parameter.types.ParameterType;
 import de.xzise.jimp.preset.DefaultNamedMethod;
 import de.xzise.jimp.variables.Variables;
 
-public class RandomMethod extends DefaultNamedMethod<Variables> {
+public class RoundMethod extends DefaultNamedMethod<Variables> {
 
-    public RandomMethod() {
-        super("random", -1);
+    private final MethodParser<?> parser;
+
+    public RoundMethod(final MethodParser<? extends Variables> parser) {
+        super("round", 1);
+        this.parser = parser;
     }
 
     @Override
     public ParameterType call(final Parameter[] parameters, final RuntimeOptions<?> runtime) {
-        return MinecraftUtil.getRandom(parameters).getValue(runtime);
-    }
+        final ParameterType type = parameters[0].getValue(runtime);
+        final double d;
+        final DecimalFormat format;
+        if (type instanceof DoubleParameter) {
+            d = Math.round(((DoubleParameter) type).asDouble());
+        } else {
+            return null;
+        }
 
+        if (type instanceof DoubleParameterType) {
+            format = ((DoubleParameterType) type).getFormat();
+        } else {
+            format = this.parser.getDefaultFormat();
+        }
+        return new DoubleParameterType(d, format);
+    }
 }
